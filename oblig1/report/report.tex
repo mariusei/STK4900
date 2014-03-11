@@ -1,0 +1,170 @@
+\documentclass[a4paper,11pt]{article}
+%\documentclass[preprint]{aa}
+
+%\documentclass[preprint]{aastex}
+
+%\documentclass[journal = ancham]{achemso}
+%\setkeys{acs}{useutils = true}
+%\usepackage{fullpage}
+\usepackage{natbib,twoopt}
+\pretolerance=2000
+\tolerance=6000
+\hbadness=6000
+%\usepackage[landscape]{geometry}
+%\usepackage{pxfonts}
+%\usepackage{cmbright}
+%\usepackage[varg]{txfonts}
+%\usepackage{mathptmx}
+%\usepackage{tgtermes}
+\usepackage[utf8]{inputenc}
+%\usepackage{fouriernc}
+%\usepackage[adobe-utopia]{mathdesign}
+\usepackage[T1]{fontenc}
+%\usepackage[norsk]{babel}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+%\usepackage[version=3]{mhchem}
+\usepackage{pstricks}
+\usepackage[font=small,labelfont=bf,tableposition=below]{caption}
+%\usepackage{subfig}
+\usepackage{subcaption}
+%\usepackage{varioref}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{sverb}
+%\usepackage{microtype}
+%\usepackage{enumerate}
+\usepackage{enumitem}
+%\usepackage{lineno}
+%\usepackage{booktabs}
+%\usepackage{changepage}
+%\usepackage[flushleft]{threeparttable}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{mathtools}
+%\usepackage{etoolbox}
+%\usepackage{xstring}
+\usepackage{aas_macros}
+
+\floatstyle{plaintop}
+\restylefloat{table}
+%\floatsetup[table]{capposition=top}
+
+\setcounter{secnumdepth}{3}
+
+\newcommand{\tr}{\, \text{tr}\,}
+\newcommand{\diff}{\ensuremath{\; \text{d}}}
+\newcommand{\diffd}{\ensuremath{\text{d}}}
+\newcommand{\sgn}{\ensuremath{\; \text{sgn}}}
+\newcommand{\UA}{\ensuremath{_{\uparrow}}}
+\newcommand{\RA}{\ensuremath{_{\rightarrow}}}
+\newcommand{\QED}{\left\{ \hfill{\textbf{QED}} \right\}}
+
+%% The below macros turn citations into ADS clickers in dvi, pdf, html output.
+%% EDP Sciences improved them in December 2012 to work also with pdflatex.
+\bibpunct{(}{)}{;}{a}{}{,}    %% natbib cite format used by A&A and ApJ
+\makeatletter
+ \newcommandtwoopt{\citeads}[3][][]{\href{http://adsabs.harvard.edu/abs/#3}%
+   {\def\hyper@linkstart##1##2{}%
+    \let\hyper@linkend\@empty\citealp[#1][#2]{#3}}}    %% Rutten, 2000
+ \newcommandtwoopt{\citepads}[3][][]{\href{http://adsabs.harvard.edu/abs/#3}%
+   {\def\hyper@linkstart##1##2{}%
+    \let\hyper@linkend\@empty\citep[#1][#2]{#3}}}      %% (Rutten 2000)
+ \newcommandtwoopt{\citetads}[3][][]{\href{http://adsabs.harvard.edu/abs/#3}%
+   {\def\hyper@linkstart##1##2{}%
+    \let\hyper@linkend\@empty\citet[#1][#2]{#3}}}      %% Rutten (2000)
+ \newcommandtwoopt{\citeyearads}[3][][]%
+   {\href{http://adsabs.harvard.edu/abs/#3}%
+   {\def\hyper@linkstart##1##2{}%
+    \let\hyper@linkend\@empty\citeyear[#1][#2]{#3}}}   %% 2000
+\makeatother
+
+%\newcommand{\diff}{%
+%    \IfEqCase{frac{\diff}{%
+%        {\ensuremath{frac{\text{d}} }}%
+%        {\ensuremath{\; \text{d}} }% 
+%    }[\PackageError{diff}{Problem with diff}{}]%
+%}%
+
+
+\date{\today}
+\title{Compulsory assignment spring 2014\\ \small{Statistical methods and applications -- STK4900}}
+\author{Marius Berge Eide \\ \texttt{m.b.eide@astro.uio.no}}
+
+
+\begin{document}
+
+
+\onecolumn
+\maketitle{}
+
+
+\section{Weight of bears!}
+This section seeks to determine whether the weight of bears can be inferred from other (more easily obtainable) covariates.
+
+The data set for this section is based on the following measurements of 54 wild bears,
+\begin{quote}
+    \texttt{Age} (months), \texttt{Month} (measurement month, 1--12), \texttt{Sex} (1: male, 2: female), \texttt{Headlen} (head length, inches), \texttt{Headwth} (head width, inches), \texttt{Neck} (neck circumference, inches), \texttt{Length} (body length, inches), \texttt{Chest} (chest circumference, inches), \texttt{Weight} (pounds)
+\end{quote}
+
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Main features of weight, length and chest} 
+
+        The data was analysed in R.
+
+        \begin{figure}[htb]
+            \centering
+            \includegraphics[width=\columnwidth]{../a1-weight_length_chest.pdf}
+            \caption{Boxplot showing the distribution of weight, length and chest measurements done on 54 bears. The mean weight is 182.9 lbs, median weight is 150.0 lbs. The mean length is 58.62 in, median length is 60.75 in. The mean chest circumference is 35.66 in, whereas the median is 34.66 in. The means are in all cases higher than the medians, which indicate that there exist outliers in the data.}
+            \label{fig:a1}
+        \end{figure}
+
+        \begin{figure}[htb]
+            \centering
+            \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{../a2-weight_length.pdf}
+                \label{fig:a2a}
+                \caption{Scatter plot of length plotted against weight.}
+            \end{subfigure}
+            ~
+            \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{../a3-weight_chest.pdf}
+                \label{fig:a2b}
+                \caption{Scatter plot of chest circumference plotted against weight.}
+            \end{subfigure}
+            \caption{Scatter plots showing relation between the covariates \textit{length} and \textit{chest circumference} and response \textit{weight}. Pearson's empirical correlation coefficient $r$ was found for both cases, where weight and length had $r = 0.86$, and Spearman's rank correlation is 0.94. The weight and chest circumference had $r = 0.96$ and Spearman's rank correlation 0.98. Pearson's correlation coefficient is more prone to outliers than Spearman's rank correlation coefficient, which there are clear indications exists, see fig.~(\ref{fig:a1}).  }
+            \label{fig:a2}
+        \end{figure}
+
+    \item A linear model on the form
+        \begin{equation}
+        \mathtt{WEIGHT} = \beta_0 + \beta_1 \mathtt{LENGTH} + \beta_2 \mathtt{CHEST} + \varepsilon
+            \label{eq:linmod1}
+        \end{equation}
+        could be found using R's \texttt{lm()} command. The resulting model was
+        \begin{equation}
+            \mathtt{WEIGHT} = -274.0 + 0.4263 \mathtt{LENGTH} + 12.11 \mathtt{CHEST}
+            \label{eq:linmod}
+        \end{equation}
+
+\end{enumerate}<++>
+
+%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%
+\bibliography{referanser}
+\bibliographystyle{apj}
+%\bibliographystyle{astroads}
+%\bibliographystyle{apj_hyperref}
+
+\clearpage
+\appendix
+\section{Appendix}
+\label{sec:appendix}
+
+\subsection{Peebles equation}
+\label{app:peebles}
+
+%\lstinputlisting[language=c++]{../mainMonteCarloVMC1.cpp}
+
+\end{document}
+
