@@ -111,7 +111,7 @@ The data set for this section is based on the following measurements of 54 wild 
 \begin{enumerate}[label=\alph*)]
     \item \textbf{Main features of weight, length and chest} 
 
-        The data was analysed in R.
+        The data was analysed in R and plotted. See the caption text for details, the data was boxplotted in fig.~(\ref{fig:a1}) and scatter plotted in fig.~(\ref{fig:a2}).
 
         \begin{figure}[htb]
             \centering
@@ -137,17 +137,50 @@ The data set for this section is based on the following measurements of 54 wild 
             \label{fig:a2}
         \end{figure}
 
-    \item A linear model on the form
+    \item \textbf{Linear models}
+        
+        A linear model on the form
         \begin{equation}
         \mathtt{WEIGHT} = \beta_0 + \beta_1 \mathtt{LENGTH} + \beta_2 \mathtt{CHEST} + \varepsilon
             \label{eq:linmod1}
         \end{equation}
-        could be found using R's \texttt{lm()} command. The resulting model was
-        \begin{equation}
-            \mathtt{WEIGHT} = -274.0 + 0.4263 \mathtt{LENGTH} + 12.11 \mathtt{CHEST}
-            \label{eq:linmod}
-        \end{equation}
+        could be found using R's \texttt{lm()} command. The resulting model gave $\beta_0 = -274.0$, $\beta_2 = 0.4263$ and $\beta_2 = 12.11$.
 
+        The t-value, if smaller than 2, confirms the null hypothesis $H_0$ that $\beta_i = 0$, meaning there is \textit{no effect} of the predictor on the  response, was found. For the predictor \texttt{LENGTH}, the t-value is 0.456, giving P-value of 0.651 that the $H_0$ is true. In this model should length be said to have no significant effect on the response \texttt{WEIGHT}. For the predictor \texttt{CHEST}, the t-value is 11.3, giving a P-value of $1.65 \times 10^{-15}$ meaning the null hypothesis is negligible.
+
+        A second linear model using the logarithm of the data,
+        \begin{equation}
+        \log(\mathtt{WEIGHT}) = \beta_0 + \beta_1 \log(\mathtt{LENGTH}) + \beta_2 \log(\mathtt{CHEST}) + \varepsilon
+            \label{eq:linmod2}
+        \end{equation}
+        where the coefficients $\beta_1$ and $\beta_2$ now give the \textit{powers} of the covariates, was found, giving coefficients $\beta_0 = -6.594$, $\beta_1 = 1.141$ and $\beta_2 = 1.960$.
+
+        Here, the t-value for the predictor $\log(\mathtt{LENGTH})$ is 5.13, giving a P-value of $4.6\times10^{-6}$ that the null hypothesis is true. The predictor $\log(\mathtt{CHEST})$ has a t-value of 12.1 and consequently a P-value for $H_0$ that is smaller than $2\times10^{-16}$. In this model, both of the covariates are significant for the outcome of the response \texttt{WEIGHT}. 
+
+        The second model suggest that the weight is given on the form
+        \begin{equation}
+            \mathtt{WEIGHT} = \mathtt{LENGTH}^{1.14} * \mathtt{CHEST}^{1.96}
+            \label{eq:weightfunc1}
+        \end{equation}
+        where the chest circumference is proportional to the radius of the chest, and the chest circumference squared is proportional to the area of the chest. The suggested formula ``volume = height $\times$ area does thus suggest a physically reasonable explanation for the latter model.
+
+    \item \textbf{Plots of the residuals}<++>
+
+    \item \textbf{Elimination of the bothersome outlier}<++>
+\end{enumerate}
+
+Only older bears, that is bears of age $>$ 12 months, are included in the remaining exercises.
+
+\begin{enumerate}[resume*]
+    \item \textbf{Second model fitted for older bears}<++>
+    
+    \item \textbf{Prediction of weight}<++>
+\end{enumerate}<++>
+
+All covariates are included in the last exercises.
+
+\begin{enumerate}[resume*]
+    \item test
 \end{enumerate}<++>
 
 %%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%
