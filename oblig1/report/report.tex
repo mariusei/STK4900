@@ -32,7 +32,8 @@
 %\usepackage{varioref}
 \usepackage{hyperref}
 \usepackage{listings}
-\usepackage{sverb}
+%\usepackage{sverb}
+\usepackage{verbatim}
 %\usepackage{microtype}
 %\usepackage{enumerate}
 \usepackage{enumitem}
@@ -46,6 +47,7 @@
 %\usepackage{etoolbox}
 %\usepackage{xstring}
 \usepackage{aas_macros}
+\usepackage[parfill]{parskip}
 
 \floatstyle{plaintop}
 \restylefloat{table}
@@ -90,7 +92,8 @@
 
 \date{\today}
 \title{Compulsory assignment spring 2014\\ \small{Statistical methods and applications -- STK4900}}
-\author{Marius Berge Eide \\ \texttt{m.b.eide@astro.uio.no}}
+\author{Marius Berge Eide \\ \texttt{m.b.eide@astro.uio.no} \\
+M{\o}llefaret 50a \\ 0750 Oslo}
 
 
 \begin{document}
@@ -162,25 +165,95 @@ The data set for this section is based on the following measurements of 54 wild 
             \mathtt{WEIGHT} = \mathtt{LENGTH}^{1.14} * \mathtt{CHEST}^{1.96}
             \label{eq:weightfunc1}
         \end{equation}
-        where the chest circumference is proportional to the radius of the chest, and the chest circumference squared is proportional to the area of the chest. The suggested formula ``volume = height $\times$ area does thus suggest a physically reasonable explanation for the latter model.
+        where the chest circumference is proportional to the radius of the chest, and the chest circumference squared is proportional to the area of the chest. The suggested formula ``volume = height $\times$ area'' does thus suggest a physically reasonable explanation for the latter model.
 
-    \item \textbf{Plots of the residuals}<++>
+    \item \textbf{Plots of the residuals}
 
-    \item \textbf{Elimination of the bothersome outlier}<++>
+        The residuals were plotted in fig.~(\ref{fig:c1}) and fig.~(\ref{fig:c2}) using the models developen in exercise~b). The figures hint that there is a systematic pattern in the residuals for the first linear model, compared to the second one, where the variances for all outcomes are centered around 0.  
+
+        \begin{figure}[htb]
+            \centering
+            \includegraphics[width=0.6\columnwidth]{../c1-weightmod_1-residuals.pdf}
+            \caption{Variances plotted for the first linear model of this exercise. The variances appear to have a systematic pattern, this figure shows that the variances tend to be slightly negative for weights somewhat larger than the mean (meaning that the model \textit{overpredicts} the outcome for these weights, and are slightly positive for lower weights (meaning the model slightly \textit{underpredicts} the outcome for these weights). Note the presence of outliers denoted by numbers appearing next to the dots. }
+            \label{fig:c1}
+        \end{figure}
+
+        \begin{figure}[htb]
+            \centering
+        \includegraphics[width=0.6\columnwidth]{../c2-weightmod_2-residuals.pdf}
+            \caption{Variances plotted for the second model of this exercise. The variances do not appear to have any systematic pattern, thus should this model neither overpredict, nor underpredict outcomes. Note the presence of the three outliers denoted by numbers next to the dots.}
+            \label{fig:c2}
+        \end{figure}
+
+    \item \textbf{Elimination of the bothersome outlier}
+
+        The outlier, element 52, was removed, and the improved data frame was stored as \texttt{bearsImp}. The resulting model of eq.~(\ref{eq:linmod2}) gives the parameters $\beta_0 = -6.258$, $\beta_1 = 1.071$ with t-value 6.026 and $\beta_2 = 1.948$ with t-value 15.07. The t-values are \textit{higher} than the t-values found in exercise b), thus are the null hypotheses even less likely with the outlier removed. The slope, given by the coefficients $\beta_1$ and $\beta_2$, is slightly altered, and so is the intercept given by $\beta_0$.  
 \end{enumerate}
 
 Only older bears, that is bears of age $>$ 12 months, are included in the remaining exercises.
 
 \begin{enumerate}[resume*]
-    \item \textbf{Second model fitted for older bears}<++>
+    \item \textbf{Second model fitted for older bears}
+        
+        Only bears older than twelve months are used in the model given by eq.~(\ref{eq:linmod2}), excluding the outlier; element 52. The selection rule gives that the new data frame is \texttt{bearsOld = bearsImp[bearsImp\$AGE>12,]}. The model has the following parameters:
+        \begin{quote}
+            $\beta_0 = -6.061$, $\beta_1 = 0.9934$ and $\beta_2= 1.983$.
+        \end{quote}
+        where the t-values for the log-dependency of the covariates \texttt{LENGTH} and \texttt{CHEST} are 4.601 and 14.98, respectively, giving the corresponding P-values $4.01\times10^{-5}$ and $<2\times10^{-16}$ that the null hypothesis has significance.
+
+        This model gives that the chest circumference raised almost perfectly to the power of two, multiplied with the prefactor $e^{\beta_0}$ and the factor $e^{\beta_2 \log(\mathtt{LENGTH})} = \mathtt{LENGTH}^{\beta_1}$ with $\beta_1$ almost perfectly one, gives the volume. The prefactor $\beta_0$ holds any constants of the formula.
+
+        The multiple correlation coefficient squared was found to be $R^2 = 0.9697$. 
     
-    \item \textbf{Prediction of weight}<++>
-\end{enumerate}<++>
+    \item \textbf{Prediction of weight}
+
+        Using the parameters given by exercise g), the weight becomes:
+        \begin{align*}
+            \mathtt{WEIGHT} &= e^{\beta_0} \mathtt{LENGTH}^{\beta_1} \mathtt{CHEST}^{\beta_2} \\
+            &= e^{-6.061} \mathtt{LENGTH}^{0.9934} \mathtt{CHEST}^{1.983}
+        \end{align*}
+        inserting \texttt{LENGTH} = 65 in and \texttt{CHEST} = 40 in, yields
+        \[ \mathtt{WEIGHT} = e^{-6.061} {\rm \, lbs C} \left( 65 \,\rm in \right)^{0.9934} \left( 40\,\rm in \right)^{1.983} = 222 \,\rm lbs \] 
+        where the factor C procures the right units. 
+
+        Comparision with figs.~(\ref{fig:a2}) shows that the resulting weight is physically sensible if one assumes a linear relationship.
+\end{enumerate}
 
 All covariates are included in the last exercises.
 
 \begin{enumerate}[resume*]
-    \item test
+    \item \textbf{Old bears: all covariates included}
+
+        Using all covariates, which are taken the logarithm of, excepth \texttt{MONTH} and \texttt{SEX}, to create a model on the form
+\begin{align}
+    \log(\mathtt{WEIGHT}) &= \beta_0 + \beta_1 \log(\mathtt{LENGTH}) + \beta_2 \log\left( \mathtt{CHEST} \right) \notag \\
+    &+ \beta_3 \log \left( \mathtt{NECK} \right) + \beta_4 \log\left( \mathtt{HEADWTH} \right) + \beta_5 \log \left( \mathtt{HEADLEN} \right) \notag \\
+    &+ \beta_6 \mathtt{SEX} + \beta_7 \mathtt{MONTH} + \beta_8 \log \left( \mathtt{AGE} \right)
+    \label{eq:fullmodel}
+\end{align}
+
+See appendix~(\ref{app:g}) for outputs from R. The data is sorted in a manner where the categorial data is compared to membership of the first category, that is, the model requires that the response belongs to at least \textit{one} of the categories, and the other categories are given as differences \textit{compared to that first category which R chose}. 
+
+In the model output, the covariates \texttt{LENGTH}, \texttt{CHEST} and \texttt{MONTH8} were the only ones to have non-significant null hypotheses. 
+
+The square of the multiple  correlation coefficient, $R^2$, was found to be $R^2 = 0.9813$, which is higher than $R^2$ for exercise e), but as the number of covariates also has increased, the more suitable candidate for comparison is the \textit{adjusted R squared}, which penalises inclusion of more predictors. For the model following eq.~(\ref{eq:fullmodel}), the adjusted $R^2 = 0.9722$, which still is higher than the adjusted $R^2 = 0.9682$ of the model in exercise e). 
+
+    \item \textbf{Cross-validated $R^2$ for g)}
+        Cross validation is a method where the model is estimated based on the exclusion of one observation $y_i$, which will be predicted by the model as $\hat{y}_i^{(-1)}$. 
+
+        The cross validated $R^2$ can be found as
+        \begin{equation}
+            R_{\rm cv}^2 = 1 - \frac{\sum_{i=1}^n \left( y_i - \hat{y}^{(-1)}_i \right)^2}{ \sum_{i=1}^n \left( y_i - \bar{y} \right)^2}
+            \label{eq:rsquared_crossval}
+        \end{equation}
+
+        The numerical code for 
+
+
+
+    \item \textbf{Forward selection of covariates}<++>
+
+    \item \textbf{Summary}<++>
 \end{enumerate}<++>
 
 %%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%
@@ -194,8 +267,117 @@ All covariates are included in the last exercises.
 \section{Appendix}
 \label{sec:appendix}
 
-\subsection{Peebles equation}
-\label{app:peebles}
+\subsection{Problem b)}
+\label{app:b}
+
+For linear model, eq~(\ref{eq:linmod1});
+{\footnotesize
+    \begin{verbatim}
+Call:
+lm(formula = weight ~ length + chest)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-73.937 -18.589  -3.041  14.550 102.055 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -273.9984    27.6023  -9.927 1.66e-13 ***
+length         0.4263     0.9358   0.456    0.651    
+chest         12.1105     1.0708  11.310 1.65e-15 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 33.33 on 51 degrees of freedom
+Multiple R-squared:  0.9279,    Adjusted R-squared:  0.9251 
+F-statistic: 328.3 on 2 and 51 DF,  p-value: < 2.2e-16
+ 
+    \end{verbatim}
+}
+
+For model from eq.~(\ref{eq:linmod2});
+{\footnotesize
+    \begin{verbatim}
+Call:
+lm(formula = log(weight) ~ log(length) + log(chest))
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.57152 -0.06548 -0.00401  0.08496  0.23001 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -6.5935     0.4536 -14.536  < 2e-16 ***
+log(length)   1.1409     0.2226   5.126  4.6e-06 ***
+log(chest)    1.9597     0.1622  12.080  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1341 on 51 degrees of freedom
+Multiple R-squared:  0.9687,    Adjusted R-squared:  0.9675 
+F-statistic:   789 on 2 and 51 DF,  p-value: < 2.2e-16
+    \end{verbatim}
+
+\subsection{Problem d)}
+\label{app:d}
+For model where the outlier, element number 52 is removed by using the data frame \texttt{bearsImp = bears[-52,]}, the model of eq.~(\ref{eq:linmod2}) gives
+{\footnotesize
+\begin{verbatim}
+Call:
+lm(formula = log(WEIGHT) ~ log(LENGTH) + log(CHEST), data = bearsImp)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.20840 -0.07001 -0.01050  0.07327  0.21383 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -6.2578     0.3664 -17.077  < 2e-16 ***
+log(LENGTH)   1.0711     0.1777   6.026 1.99e-07 ***
+log(CHEST)    1.9479     0.1293  15.071  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1068 on 50 degrees of freedom
+Multiple R-squared:  0.9786,    Adjusted R-squared:  0.9778 
+F-statistic:  1144 on 2 and 50 DF,  p-value: < 2.2e-16
+\end{verbatim}}
+
+\subsection{Problem e)}
+\label{app:e}
+Using only bears of age $> 12$ months. Selection done as \texttt{bearsOld = bears[bearsImp\$AGE>12]}, and evaluated to fit a model following eq.~(\ref{eq:linmod2}):
+{\footnotesize
+\begin{verbatim}
+Call:
+lm(formula = log(WEIGHT) ~ log(LENGTH) + log(CHEST), data = bearsOld)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.210902 -0.071438 -0.009663  0.061436  0.212795 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -6.0610     0.5447 -11.127 5.83e-14 ***
+log(LENGTH)   0.9934     0.2159   4.601 4.01e-05 ***
+log(CHEST)    1.9832     0.1324  14.981  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1026 on 41 degrees of freedom
+Multiple R-squared:  0.9697,    Adjusted R-squared:  0.9682 
+F-statistic: 655.7 on 2 and 41 DF,  p-value: < 2.2e-16
+\end{verbatim}}
+
+\subsection{Problem g)}
+\label{app:g}
+Results for a fitted model using eq.~(\ref{eq:fullmodel}). 
+
+{\footnotesize
+    \verbatiminput{../g_output.txt}
+}
+
+
+
 
 %\lstinputlisting[language=c++]{../mainMonteCarloVMC1.cpp}
 
