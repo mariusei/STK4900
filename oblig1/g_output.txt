@@ -1,0 +1,34 @@
+
+Call:
+lm(formula = log(WEIGHT) ~ log(LENGTH) + log(CHEST) + log(NECK) + 
+    log(HEADWTH) + log(HEADLEN) + SEX + MONTH + log(AGE), data = bearsOld, 
+    x = T, y = T)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.168781 -0.052393  0.002632  0.056319  0.187365 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -4.77179    0.74176  -6.433 4.89e-07 ***
+log(LENGTH)   0.61170    0.28311   2.161   0.0391 *  
+log(CHEST)    2.03921    0.24342   8.377 3.11e-09 ***
+log(NECK)     0.10965    0.17354   0.632   0.5324    
+log(HEADWTH)  0.23544    0.14370   1.638   0.1121    
+log(HEADLEN) -0.37519    0.31843  -1.178   0.2483    
+SEX2         -0.01716    0.05206  -0.330   0.7441    
+MONTH5        0.12393    0.08204   1.511   0.1417    
+MONTH6        0.09487    0.13430   0.706   0.4856    
+MONTH7        0.10751    0.08710   1.234   0.2270    
+MONTH8        0.18827    0.08084   2.329   0.0270 *  
+MONTH9        0.11762    0.07164   1.642   0.1114    
+MONTH10       0.07502    0.07419   1.011   0.3203    
+MONTH11      -0.01611    0.07878  -0.205   0.8394    
+log(AGE)      0.05236    0.05923   0.884   0.3839    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.09595 on 29 degrees of freedom
+Multiple R-squared:  0.9813,	Adjusted R-squared:  0.9722 
+F-statistic: 108.5 on 14 and 29 DF,  p-value: < 2.2e-16
+
