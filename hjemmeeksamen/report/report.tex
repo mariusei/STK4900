@@ -189,9 +189,25 @@
     \item a
 \end{enumerate}
 
+\section*{Problem 3 - Wheezing}
+\begin{enumerate}[label=\alph*)]
+    \item  The proportion of children with wheezing to whether the mother is a smoker or non-smoker can be found as $\hat{p}_{\rm smoker} = w / n_{\rm smoker}$ and  $\hat{p}_{\rm non-smoker} = w / n_{\rm non-smoker}$, where $w$ is the number of children wheezing in the sample, and $n_i$ is the subgroup of the population with property $i$. A null hypothesis, $H_0$, that $p_{\rm smoker} = p_{\rm non-smoker}$ can be estimated using the $z$-statistic, given as
+        \begin{equation}
+            z = \frac{\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker}}{se_0(\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} ) }
+            \label{eq:z_statistic}
+        \end{equation}
+        where the standard error under the null hypothesis is
+        \begin{equation}
+            se_0 \left( \hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} \right) = \sqrt{ \frac{\hat{p} \left( 1 - \hat{p} \right)}{n_{\rm smoker}} + \frac{\hat{p}\left( 1- \hat{p} \right)}{n_{\rm non-smoker}}  }
+            \label{eq:se_0}
+        \end{equation}
+        where $\hat{p}$ is the combined sample proportion. The null-hypothesis is rejected for large $|z|$-values.
 
-\begin{enumerate}[resume*]
-    \item a
+        The proportions were estimated using R, giving $\hat{p}_{\rm smoker} = 0.1751$ and $\hat{p}_{\rm non-smoker} = 0.1393$.
+
+        The 95 \% confidence interval for the difference $\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker}$ is $\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} \pm 1.96 \cdot se \left( \hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} \right)$, where the standard error now is for each sample, giving the interval $0.0358 \pm 1.96 \cdot 0.0167$ or $[3.123 \times 10^{-2}, 6.857 \times 10^{-2}]$.
+
+
 \end{enumerate}
 
 %%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%
