@@ -207,6 +207,25 @@
 
         The 95 \% confidence interval for the difference $\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker}$ is $\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} \pm 1.96 \cdot se \left( \hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} \right)$, where the standard error now is for each sample, giving the interval $0.0358 \pm 1.96 \cdot 0.0167$ or $[3.123 \times 10^{-2}, 6.857 \times 10^{-2}]$.
 
+        The $z$-statistic was found to be $z = 2.206$, which is significant, and the null hypothesis can be rejected.
+
+        The relative risk can be found as the ratio between an \textit{exposed} and \textit{un-exposed} population, if these are independent. Denoting $w = 0,1$ the event that a member of the population wheezes, given an $x = 0,1$ that the mother smokes, one can express $p_{\rm smoker} = P( w=1 | x=1 )$ and $p_{\rm non-smoker} = P( w=1 | x=0)$. The relative risk (RR) then is
+        \begin{equation}
+            RR = \frac{P\left( w=1 | x=1 \right)}{P\left( w=1 | x=0 \right)}
+            \label{eq:RR}
+        \end{equation}
+        where an increase in RR corresponds to a larger $P(w=1 | x=1)$ and hence a greater risk of wheezing if the mother smokes.
+
+        The odds ratio (OR) is derived from the odds, where the odds is $p/(1-p)$, the odds ratio between two $p$-s is
+        \begin{equation}
+            OR = \frac{p_{\rm smoking} / \left( 1-p_{\rm smoking} \right)}{p_{\rm non-smoking} / \left( 1-p_{\rm non-smoking} \right)}
+            \label{eq:OR}
+        \end{equation}
+
+        In the case where $p_{\rm smoking} = P(w=1 | x=1 ) = 0.1751$ and $p_{\rm non-smoking} = P(w=1 | x=0) = 0.1393$, the relative risk becomes $RR = 1.257$ and the odds-ratio is $OR = 1.312$ or approximately 4:3. 
+
+        For two independent populations, the RR gives that if the mother smokes, there is a 26 \% higher probability that the child wheezes. The odds-ratio gives that the baby is more likely to have wheezing if exposed to a smoking mother. The odds ratio should be accompanied by a confidence interval, which will be obtained in the next exercise. 
+
 
 \end{enumerate}
 
@@ -235,6 +254,12 @@ For the linear models in exercise 1a);
 For the three linear models in exercise 1b);
 {\footnotesize
     \verbatiminput{../1b_models.txt}
+}
+
+\subsection{Problem 3}
+\subsubsection{3a)}
+{\footnotesize
+    \verbatiminput{../res_ex3.txt}
 }
 
 
