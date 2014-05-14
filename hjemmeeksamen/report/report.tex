@@ -103,9 +103,9 @@
 \maketitle{}
 
 
-\section*{Problem 1}
+\section*{Problem 1 -- Urea formaldehyde in houses}
 
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=1\alph*)]
     \item The concentration in parts per million of formaldehyde in 24 houses is tested against an air tightness measure in the range $[0,10]$ and whether urea formaldehyde foam insulation (UFFI) has been used. Fig.~(\ref{fig:1a-1}) shows a scatter plot of the CH$_2$O concentration distributed against the air tightness, and fig.~(\ref{fig:1a-2}) shows a box plot where the CH$_2$O concentration distribution is shown as a function of UFFI presence. 
 
         The plots show that there both appears to be a positive correlation between increased air tightness and CH$_2$O concentration and also a positive correlation between UFFI presence and increased CH$_2$O concentration. However, the plots do not tell whether there is a relation between the presence of UFFI and the air tightness, and if so, these covariates on the response CH$_2$O concentration are \textit{confounded}. 
@@ -138,7 +138,7 @@
         \begin{figure}[htb]
             \centering
             \includegraphics[width=0.6\columnwidth]{../1a3-model_crossvalR2.pdf}
-            \caption{The coefficients of determination $R^2$ (blue boxes), adjusted $R_2$ (black circles) and the cross validated $R^2_{\rm cv}$ (red filled circles) plotted against model number (given in tab.~(\ref{tab:2})). The highest cross validated coefficient of determination is achieved for model 3. This model is pursued further in problem 1c). }
+            \caption{The coefficients of determination $R^2$ (blue boxes), adjusted $R^2$ (black circles) and the cross validated $R^2_{\rm cv}$ (red filled circles) plotted against model number (given in tab.~(\ref{tab:2})). The highest cross validated coefficient of determination is achieved for model 3. This model is pursued further in problem 1c). }
             \label{fig:1a-3}
         \end{figure}
     \item Including a interaction term and both covariates, gives model 4. Both covariates alone is given by model 3. Model 5 includes, in addition to an interaction term, also a quadratic term for the air tightness. See tab.~(\ref{tab:2}). 
@@ -163,7 +163,7 @@
                 5       & Y & Y & Y & Y & 0.7899 & 0.7457 & 0.7457 \\
                 \hline
             \end{tabular}}
-            \caption{Models used in problem 1, showing what covariates that are included. The three rightmost columns give the $R^2$ coefficients, where the adjusted $R^2$ coefficient is less prone to outliers, and the cross validated $R^2_{\rm cv}$. The latter penalises the inclusion of additional covariates. See fig.~(\ref{fig:1a-3}) for a plot of the coefficients of determination.}
+            \caption{Models used in problem 1, showing the covariates used in each model. The three rightmost columns give the $R^2$ coefficients, where the adjusted $R^2$ coefficient is less prone to outliers, and the cross validated $R^2_{\rm cv}$ penalises the inclusion of additional covariates. See fig.~(\ref{fig:1a-3}) for a plot of the coefficients of determination.}
             \label{tab:2}
         \end{table}
 
@@ -183,14 +183,65 @@
         \end{figure}
 \end{enumerate}
 
-\section*{Problem 2}
-\begin{enumerate}[label=\alph*)]
+\clearpage
+\section*{Problem 2 -- German health reform}
+    In this exercise, data from the German health reform is analysed. It investigates how the number of visits during a previous three month period to the doctor depends on the factors \texttt{age}, \texttt{educ} (education in years), \texttt{married} (binary), \texttt{badh} (in ``bad'' or ``good'' health, binary), \texttt{loginc} (the logarithm of the income in Marks), and \texttt{reform} (binary, whether the participant was surveyed prior to, or after the health reform).  
 
-    \item a
-\end{enumerate}
+\begin{enumerate}[label=2\alph*)]
+    \item The motivation for using Poisson regression for the analysis of the data set is that the doctoral visits can be thought of as a Poisson process -- these are events happening randomly over time. Such a process can be modelled using the rate factor $\lambda$, giving the rate of events per time. If $\lambda$ is constant and the events are independent of each other and do not occur together, we have a Poisson process. The \textit{rate ratio} gives the ratio between two rates, where one $\lambda$ is a function of several covariates, and the other is the function of the same covariates, \textit{but} with one unit's change in one of these.
+        
+        The rate can be modelled as
+        \begin{equation}
+            \lambda_i = \lambda\left( x_{1i}, x_{2i}, \dots, x_{pi} \right) = \exp\left[ \beta_0 + \beta_{1} x_{1i} + \beta_2 x_{2i} + \beta_p x_{pi} \right]
+            \label{eq:rate}
+        \end{equation}
+        for individual $i$ whose rate count $y_i$ is a realisation of a Poisson distributed random variable $Y_i \sim {\rm Po}(\lambda_i)$. The rate ratio ($RR$) is the ratio between two subjects $i$ and $j$, where the only difference is that one of the covariates has a change of one unit, ie., $x_{ki} = x_{kj} = x_k$ for $k=1,\dots,p$, except for one covariate, say $x_{ik} \neq x_{jk}$ for $k=1$, but is $x_{i1} = x_1 + \Delta_{x_1}$ and $x_{j1} = x_1$ and the ratio can thus be written as
+        \begin{align}
+            RR &= \frac{\lambda \left( x_1 + \Delta_{x_1}, x_2, \dots, x_p \right)}{\lambda \left( x_1, x_2, \dots, x_p \right)} \notag \\
+               &= \frac{\exp\left[ \beta_0 + \beta_1 \left( x_1 + \Delta_{x_1} \right) + \beta_2 x_2 + \dots \beta_p x_p \right]}{\exp \left[ \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_p x_p \right]} \notag \\
+               &= \exp\left[ \beta_1 \Delta_{x_1} \right],
+            \label{eq:rate_ratio}
+        \end{align}
+        a $\hat{\beta}_k = 0$ would correspond to a rate ratio of 1, meaning there is no effect from the corresponding covariate. Negative values yields rate ratios smaller than one, meaning the effect of the covariate is to \textit{reduce} the rate following a positive change in $x_k$, and positive values of $\hat{\beta}_k$ corresponds to an increase in rate as an effect of a positive change of the corresponding covariate.
 
-\section*{Problem 3 - Wheezing}
-\begin{enumerate}[label=\alph*)]
+        A Poisson-family \texttt{glm} was produced in R with only one covariate; \texttt{reform}, which is binary and indicates the time of the interview. The baseline that is used for comparison is the expected doctoral visitation rate \textit{prior} to the health reform. In this exercise, we are thus dealing with \textit{rates} rather than probabilities or proportions.
+
+        The parameters for the model with one covariate were estimated to be $\hat{\beta}_0 = 1.041$ and $\hat{\beta}_{\rm reform} = -0.1848$, with $se(\hat{\beta}_{\rm reform}) = 0.0264$ and $\exp\left[ -0.1848 \right] = 0.8312$. The 95 \% confidence interval for the rate ratio for the parameter $\beta_{\rm reform}$ is found as
+        \begin{equation}
+            RR = \exp \left[ \hat{\beta}_{\rm reform} \pm 1.96 \cdot se\left( \hat{\beta}_{\rm reform} \right) \right]
+            \label{eq:rate_ratio_CI}
+        \end{equation}
+        which gives a 95 \% CI: $[0.7893, 0.8754]$. As a rate ratio of unity indicates no change, and is not included in the CI, the reform effect should be significant. This can also be seen from the $P$-value for the $z$-statistic, with $P\sim 10^{-12}$, and the null hypothesis (no effect from \texttt{reform} covariate) is \textit{rejected}. 
+
+        The physical interpretation from the rate ratio is that following the health reform, an individual would see the doctor approximately 20 \% less often than prior to the reform. See appendix~(\ref{app:2a}) for R-outputs.
+
+    \item Using all covariates in a model, the following covariates were found to have a significant impact on the tendency to visit the doctor;
+        \begin{itemize}
+            \item \texttt{reform}: $\hat{\beta}_{\rm reform} = -0.1402$, $|z| = 5.279$, $RR \in [0.8251, 0.9157]$,
+            \item \texttt{age}: $\hat{\beta}_{\rm age} = 0.0044$, $|z| = 3.352$, $RR \in [1.002, 1.007]$, 
+            \item \texttt{badh}: $\hat{\beta}_{\rm badh} = 1.133$, $|z| = 37.40$, $RR \in [2.926, 3.296]$,
+            \item \texttt{loginc}: $\hat{\beta}_{\rm loginc} = 0.1492$, $|z| = 4.140$, $RR \in [1.082, 1.246]$.
+        \end{itemize}
+
+        It should be noticed that the maximum likelihood estimate of $\beta_{\rm reform}$ has changed slightly closer to zero, thus reducing the overall impact of the health reform on the frequency of the doctoral visits. But this does not mean that the effect of the health reform is insignificant, as the large $|z|$-value indicates. 
+        
+        The effect of the health reform variable is thus only modestly changed after the inclusion of the other covariates, indicating that it is both independent (not confounded) and also has had a significant impact on the visitation rates.
+        
+        The effect of \texttt{age} may seem low, but the $RR$ corresponds to an increase of one year, with the baseline being 20 years of age. An individual being 60 years of age responds to a change in the rate ratio of $\exp\left[\rm (0.0044 \, 1/yr) \cdot 40 yr \right] = 1.191$, or an increase of almost 20 \% in the doctoral visitation rate. 
+
+        It should also be noted that being in the category ``bad health'' (saying own health belongs to either of the categories ``very poor'', ``poor'' or ``poor'') has the largest and most significant impact on the visitation rate. Physically, this also makes sense, as an individual in bad health should see the doctor to find ways to mitigate the impact.
+
+        The logarithm of the income covariate, \texttt{loginc}, shows an increase in visitation rates for increased income, with $RR = 1.161$, or a 16~\% increase per unit logarithmic increase in household income. The household with the highest income has a rate ratio of
+        \[
+        RR = \exp[\hat{\beta}_{\rm loginc} \cdot \left( \max({\rm loginc}) - \min\left( {\rm loginc} \right) \right)] = 1.686
+        \]
+        when compared to the baseline (lowest income, youngest, in good health).
+
+\end{enumerate} 
+
+\clearpage
+\section*{Problem 3 -- Wheezing}
+\begin{enumerate}[label=3\alph*)]
     \item  The proportion of children with wheezing to whether the mother is a smoker or non-smoker can be found as $\hat{p}_{\rm smoker} = w / n_{\rm smoker}$ and  $\hat{p}_{\rm non-smoker} = w / n_{\rm non-smoker}$, where $w$ is the number of children wheezing in the sample, and $n_i$ is the subgroup of the population with property $i$. A null hypothesis, $H_0$, that $p_{\rm smoker} = p_{\rm non-smoker}$ can be estimated using the $z$-statistic, given as
         \begin{equation}
             z = \frac{\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker}}{se_0(\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} ) }
@@ -231,8 +282,7 @@
             p(x) = \frac{\exp\left[ \beta_0 + \beta_1 x \right]}{1 + \exp\left[ \beta_0 + \beta_1 x \right]}
             \label{eq:logit}
         \end{equation}
-
-        where $\beta_0$ is associated with the baseline value, that is the reference probability where the covariate $x$ is not assumed to affect the outcome. Any changes in $x$ would be expressed as a change from the baseline. A change of one unit in $x$ can be expressed as $x' = x + \Delta_x$, the odds ratio between $p(x)$ and $p(x')$ can be found by using that the odds is 
+        where $\beta_0$ is associated with the baseline value, that is the reference probability where the covariate $x$ is not assumed to affect the outcome, the outcome $p(x)$ can be modelled as a function of the predictor $x$. Any changes in $x$ would be expressed as a change from the baseline. A change of one unit in $x$ can be expressed as $x' = x + \Delta_x$, the odds ratio between $p(x)$ and $p(x')$ can be found by using that the odds is 
         \begin{align*}
             \frac{p(x)}{1 - p(x)} &= \frac{\exp\left[ \beta_0 + \beta_1 x \right] / \left( 1 + \exp\left[ \beta_0 + \beta_1 x \right] \right)}{1 - \exp\left[ \beta_0 + \beta_1 x \right]/\left( 1 + \exp\left[ \beta_0 + \beta_1 x \right] \right)} \\
             &= \frac{\exp\left[ \beta_0 + \beta_1 x \right]}{1 + \exp\left[ \beta_0 + \beta_1 x \right] - \exp\left[ \beta_0 + \beta_1 x \right]} \\
@@ -269,7 +319,7 @@
 
         The first model, with only one covariate, has residual deviance $D_0 = 1824$, and the model with two covariates has residual deviance $D = 1820$, giving $G = 4.417$ and $P = 0.0356$ under one degree of freedom. The second model does thus prove to be a slight improvement over the first model. It should be noted that the MLE $\beta_{\rm smoking}$ did not change substantially from one model to the other, indicating that the covariates \texttt{age} and \texttt{smoking} are \textit{not} confounded. The association with smoking is thus \textit{not} changed when taking age into account.
 
-        In the second model, the MLEs $\beta_{\rm smoking} = 0.2721$ indicates that the binary covariate \texttt{smoking} increases the odds of a child wheezing, compared to the baseline where the mother does not smoke. Furthermore, $\beta_{\rm age} = -0.1134$ indicates that the odds of wheezing are \textit{decreased} when the age is increased. The odds of wheezing is reduced by a factor of $\exp\left[ -0.1134 x_{\rm age} \right]$ for increases in one year from the baseline 7 years, to the maximum 10 years of age. 
+        In the second model, the MLEs $\beta_{\rm smoking} = 0.2721$ indicates that the binary covariate \texttt{smoking} increases the odds of a child wheezing, compared to the baseline where the mother does not smoke. Furthermore, $\beta_{\rm age} = -0.1134$ indicates that the odds of wheezing are \textit{decreased} when the age is increased. The odds of wheezing is reduced by a factor of $\exp\left[ -0.1134 x_{\rm age} \right]$ for increases in units of one year in $x_{\rm age}$ from the baseline 7 years, to the maximum 10 years of age. 
 
 \end{enumerate}
 
@@ -284,7 +334,8 @@
 \section{Appendix}
 \label{sec:appendix}
 
-\subsection{Problem 1a)}
+\subsection{Problem 1 -- Urea formaldehyde in houses}
+\subsubsection{Problem 1a)}
 \label{app:1a}
 
 For the linear models in exercise 1a);
@@ -292,7 +343,7 @@ For the linear models in exercise 1a);
     \verbatiminput{../1a_models.txt}
 }
 
-\subsection{Problem 1b)}
+\subsubsection{Problem 1b)}
 \label{app:1b}
 
 For the three linear models in exercise 1b);
@@ -300,7 +351,21 @@ For the three linear models in exercise 1b);
     \verbatiminput{../1b_models.txt}
 }
 
-\subsection{Problem 3}
+\subsection{Problem 2 -- German health reform}
+
+\subsubsection{Problem 2a)}
+\label{app:2a}
+{\footnotesize
+    \verbatiminput{../res_ex2a.txt}
+}
+
+\subsubsection{Problem 2b)}
+\label{app:2b}
+{\footnotesize
+    \verbatiminput{../res_ex2b.txt}
+}
+
+\subsection{Problem 3 -- Wheezing}
 \subsubsection{3a)}
 {\footnotesize
     \verbatiminput{../res_ex3.txt}
