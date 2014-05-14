@@ -5,7 +5,6 @@
 
 # Load data:
 wheeze<-read.table("http://www.uio.no/studier/emner/matnat/math/STK4900/v14/wheeze.txt",h=T)
-sink("res_ex3.txt", split=TRUE)
 
 smoking     = wheeze$smoking            # binary, yes=1, no=0
 age         = wheeze$age                # in years, of childe
@@ -39,6 +38,7 @@ RR = p_ys/p_ns
 OR = p_ys/(1-p_ys) / ( p_ns/(1-p_ns) )
 
 # PRINT RESULTS TO FILE
+sink("res_ex3.txt", split=TRUE)
 print("95% CI for wheezing difference:")
 print(p_diff.95CI)
 print("Proportion: wheeze w/ smoking mother")
@@ -57,6 +57,28 @@ print("Relative risk")
 print(RR)
 print("Odds ratio:")
 print(OR)
+sink()
+
+### 3b) Analysing data using logistic regression
+glm1        = glm(wheezing~factor(smoking), family=binomial)
+glm2        = glm(wheezing~factor(smoking)+age, family=binomial)
+glm1.beta1  = fit.glm1$coefficient[2]
+glm1.stderr = summary(fit.glm)$coefficients[2,2]
+glm1.OR.lower = exp(glm1.beta1 - 1.96 * glm1.stderr)
+glm1.OR.upper = exp(glm1.beta1 + 1.96 * glm1.stderr)
+glm1.95CI   = cbind(exp(glm1.beta1), exp(glm1.stderr), 
+                    glm1.OR.lower, glm1.OR.upper)
+
+
+# Print results to file
+sink("res_ex3b.txt", split=TRUE)
+print("Logistic model with only one covariate")
+print(summary(glm1))
+print("Odds ratio and CI for ONE COVARIATE")
+print(glm1.95CI)
+print("Logistic model with two covariates")
+print(summary(glm2))
+
 
 ## Relation between CH20 and AIR tightness
 #par(ps = 22, cex = 2, cex.main = 2)
