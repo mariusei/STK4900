@@ -117,7 +117,7 @@
         \end{equation}
         where $\beta_0$ gives the mean concentration of \CHHO (ie.,~\textit{the intercept}), and $\beta_1$ gives the change per unit change (ie.,~\textit{the slope}) in the covariate $x_1$ which either can be the air tightness, or the binary covariate UFFI presence in this part of the problem. The $\varepsilon$ is the error. 
 
-        The coefficients of determination, giving a measure on how large the residual sum of squares are, compared to the total sum of squares, are given for the aforementioned models in tab.~(\ref{tab:1}). A smaller residual sum of squares, gives a larger $R^2$.  This is beneficial, because the variability is then minimised.
+        The coefficients of determination, giving a measure on how large the residual sum of squares are, compared to the total sum of squares, are given for the aforementioned models in tab.~(\ref{tab:2}). A smaller residual sum of squares, gives a larger $R^2$.  This is beneficial, because the variability is then minimised.
 
         Model 1 has $\beta_0 = 46.12$ and $\beta_1 = 9.074$ and the Student's $t$-value is 2.253 giving a $P$-value of 0.0346, which is large, meaning the null hypothesis $H_0$ (the covariate has no effect) is \textit{not} rejected.
 
@@ -138,12 +138,12 @@
         \begin{figure}[htb]
             \centering
             \includegraphics[width=0.6\columnwidth]{../1a3-model_crossvalR2.pdf}
-            \caption{The coefficients of determination $R^2$ (blue boxes), adjusted $R_2$ (black circles) and the cross validated $R^2_{\rm cv}$ (red filled circles) plotted against model number (given in tab.~(\ref{tab:1}). The highest cross validated coefficient of determination is achieved for model 3. This model is pursued further in problem 1c). }
+            \caption{The coefficients of determination $R^2$ (blue boxes), adjusted $R_2$ (black circles) and the cross validated $R^2_{\rm cv}$ (red filled circles) plotted against model number (given in tab.~(\ref{tab:2})). The highest cross validated coefficient of determination is achieved for model 3. This model is pursued further in problem 1c). }
             \label{fig:1a-3}
         \end{figure}
-    \item Including a interaction term and both covariates, gives model 4. Both covariates alone is given by model 3. Model 5 includes, in addition to an interaction term, also a quadratic term for the air tightness. See tab.~(\ref{tab:1}). 
+    \item Including a interaction term and both covariates, gives model 4. Both covariates alone is given by model 3. Model 5 includes, in addition to an interaction term, also a quadratic term for the air tightness. See tab.~(\ref{tab:2}). 
 
-        According to the cross validated $R^2_{\rm cv}$, model 3 is the best model, with $\beta_0 = 31.34$, $\beta_{\rm AIR} = 2.855$ and $\beta_{\rm UFFI} = 9.312$. The $P$-values for both covariates are small (of magnitudes $10^{-7}$ and $10^{-4}$, respectively), thus are they likely to have significant effect on the outcome. 
+        According to the cross validated $R^2_{\rm cv}$, model 3 is the best model, where the intercept and slopes are approximated as $\hat{\beta}_0 = 31.34$, $\hat{\beta}_{\rm AIR} = 2.855$ and $\hat{\beta}_{\rm UFFI} = 9.312$. The $P$-values for both covariates are small (of magnitudes $10^{-7}$ and $10^{-4}$, respectively), thus are they likely to have significant effect on the outcome. 
 
         The interaction term \texttt{AIR:UFFI}, which would be represented in a linear model as the term $\beta_{\rm AIR:UFFI} x_{\rm AIR} x_{\rm UFFI}$, had a large $P$-value and is thus insignificant in combination with the other two covariates.
 
@@ -164,7 +164,7 @@
                 \hline
             \end{tabular}}
             \caption{Models used in problem 1, showing what covariates that are included. The three rightmost columns give the $R^2$ coefficients, where the adjusted $R^2$ coefficient is less prone to outliers, and the cross validated $R^2_{\rm cv}$. The latter penalises the inclusion of additional covariates. See fig.~(\ref{fig:1a-3}) for a plot of the coefficients of determination.}
-            \label{tab:1}
+            \label{tab:2}
         \end{table}
 
     \item The residuals (the difference between the observed values, and the predicted values by the linear model) for model 3 are plotted in figs.~(\ref{fig:1c-1}, \ref{fig:1c-2}). See the caption text for details. The residuals do not appear to have any systematic pattern. 
@@ -172,13 +172,13 @@
         \begin{figure}[htb]
             \centering
             \includegraphics[width=0.6\columnwidth]{../1c1-model3_residuals.pdf}
-            \caption{Plot showing the distribution using model 3, where the response CH$_2$O concentration in PPM is given by the two linear covariates \texttt{AIR} (density) and \texttt{UFFI} (presence of formaldehyde insulation foam). Note that the residuals do not appear to have any systematic pattern, they are thus distributed homoscedastically. The presence of outliers (denoted by numbers next to the points) make the model under- and overpredict the model response compared to the outlier's values. }
+            \caption{Plot showing the distribution using model 3, where the response CH$_2$O concentration in PPM is given by the two covariates \texttt{AIR} (density) and \texttt{UFFI} (presence of formaldehyde insulation foam). Note that the residuals do not appear to have any systematic pattern, they are thus distributed homoscedastically. The presence of outliers (denoted by numbers next to the points) make the model under- and overpredict the model response compared to the outlier's values. }
             \label{fig:1c-1}
         \end{figure}
         \begin{figure}[htb]
             \centering
             \includegraphics[width=0.6\columnwidth]{../1c2-model3_stdresiduals.pdf}
-            \caption{Plot showing the distribution of \textit{standardised} residulas for model 3 with two linear covariates. The standardised residuals are less prone to outliers, in comparision with fig.~(\ref{fig:1c-1}), where the outliers affect the predicted outcome, there is no such pattern in the current plot. }
+            \caption{Plot showing the distribution of \textit{standardised} residulas for model 3 with two covariates. The standardised residuals are less prone to outliers, in comparision with fig.~(\ref{fig:1c-1}), where the outliers affect the predicted outcome, there is no such pattern in the current plot. }
             \label{fig:1c-2}
         \end{figure}
 \end{enumerate}
@@ -222,10 +222,48 @@
             \label{eq:OR}
         \end{equation}
 
-        In the case where $p_{\rm smoking} = P(w=1 | x=1 ) = 0.1751$ and $p_{\rm non-smoking} = P(w=1 | x=0) = 0.1393$, the relative risk becomes $RR = 1.257$ and the odds-ratio is $OR = 1.312$ or approximately 4:3. 
+        In the case where the proportions are approximated as $\hat{p}_{\rm smoking} = P(w=1 | x=1 ) = 0.1751$ and $\hat{p}_{\rm non-smoking} = P(w=1 | x=0) = 0.1393$, the relative risk becomes $RR = 1.257$ and the odds-ratio is $OR = 1.312$ or approximately 4:3. 
 
         For two independent populations, the RR gives that if the mother smokes, there is a 26 \% higher probability that the child wheezes. The odds-ratio gives that the baby is more likely to have wheezing if exposed to a smoking mother. The odds ratio should be accompanied by a confidence interval, which will be obtained in the next exercise. 
 
+    \item Using logistic regression, yielding a model on the form
+        \begin{equation}
+            p(x) = \frac{\exp\left[ \beta_0 + \beta_1 x \right]}{1 + \exp\left[ \beta_0 + \beta_1 x \right]}
+            \label{eq:logit}
+        \end{equation}
+
+        where $\beta_0$ is associated with the baseline value, that is the reference probability where the covariate $x$ is not assumed to affect the outcome. Any changes in $x$ would be expressed as a change from the baseline. A change of one unit in $x$ can be expressed as $x' = x + \Delta_x$, the odds ratio between $p(x)$ and $p(x')$ can be found by using that the odds is 
+        \begin{align*}
+            \frac{p(x)}{1 - p(x)} &= \frac{\exp\left[ \beta_0 + \beta_1 x \right] / \left( 1 + \exp\left[ \beta_0 + \beta_1 x \right] \right)}{1 - \exp\left[ \beta_0 + \beta_1 x \right]/\left( 1 + \exp\left[ \beta_0 + \beta_1 x \right] \right)} \\
+            &= \frac{\exp\left[ \beta_0 + \beta_1 x \right]}{1 + \exp\left[ \beta_0 + \beta_1 x \right] - \exp\left[ \beta_0 + \beta_1 x \right]} \\
+            &= \exp\left[ \beta_0 + \beta_1 x \right]
+        \end{align*}
+        giving an odds ratio between $p(x)$ and $p(x')$
+        \begin{align*}
+            OR &= \frac{p(x')/\left( 1 - p(x') \right)}{p(x)/\left( 1-p(x) \right)} \\
+            &= \frac{\exp\left[ \beta_0 + \beta_1 x' \right]}{\exp\left[ \beta_0 + \beta_1 x \right]} \\
+            &= \exp\left[ \beta_1 \left( x' - x \right) \right] = \exp\left[ \beta_1 \left( (x + \Delta_x) - x \right) \right] \\
+            &= \exp\left[ \beta_1 \Delta_x \right],
+        \end{align*}
+
+        having $\Delta_x$ as one unit increase in $x$, the odds ratio becomes $\exp[\beta_1]$. 
+
+        The confidence interval for the odds ratio is baked into the uncertainty following the approximation of the maximum likelohood parameter $\beta_1$; $\hat{\beta_1}$. 
+
+        Using the \texttt{glm}-argument with \texttt{family=binomial} in R, the maximum likelihood parameters $\beta_0$, $\beta_{\rm smoking}$ and $\beta_{\rm age}$ were estimated for the case where children were wheezing.
+
+        First, a model with only the binary covariate ``\texttt{smoking}'', gave the estimates $\hat{\beta}_0 = -0.8630$ and $\hat{\beta}_{\rm smoking} = 0.2721$ which yields the odds ratio $OR = \exp[0.2721] = 1.312$, exactly the same as the OR calculated in ex.~3a). 
+        
+        The 95 \% confidence interval is given from the standard error $se(\hat{\beta}_{\rm smoking}) = 0.1233$. This gives an $OR$
+        \begin{equation}
+         OR = \exp \left[ \hat{\beta}_{\rm smoking} \pm 1.96 \cdot se\left( \hat{\beta}_{\rm smoking} \right) \right],
+            \label{OR}
+        \end{equation}
+        or  $OR \in \left[1.030, 1.671  \right]$. Note that the lower bound is close to one. An $OR$ of one means that the covariate has \textit{no effect}. 
+        
+        The null hypothesis that smoking has no effect ($\beta_{\rm smoking} = 0$) is rejected if $|z| = \big| \hat{\beta}_{\rm smoking} / se\left( \hat{\beta}_{\rm smoking}  \right) \big|$ is large. Here, $z = 2.202$, yielding a slightly \textit{significant} $P$-value, meaning the null hypothesis could be valid; $P = 0.0277$. 
+
+        A second model, including the covariate \texttt{age} as well as the binary covariate \texttt{smoking}, would need a different mean of testing the null hypothesis that the covariates have no effect. 
 
 \end{enumerate}
 
@@ -260,6 +298,12 @@ For the three linear models in exercise 1b);
 \subsubsection{3a)}
 {\footnotesize
     \verbatiminput{../res_ex3.txt}
+}
+
+
+\subsubsection{3b)}
+{\footnotesize
+    \verbatiminput{../res_ex3b.txt}
 }
 
 
