@@ -222,7 +222,7 @@
             \label{eq:OR}
         \end{equation}
 
-        In the case where the proportions are approximated as $\hat{p}_{\rm smoking} = P(w=1 | x=1 ) = 0.1751$ and $\hat{p}_{\rm non-smoking} = P(w=1 | x=0) = 0.1393$, the relative risk becomes $RR = 1.257$ and the odds-ratio is $OR = 1.312$ or approximately 4:3. 
+        In the case where the proportions are approximated as $\hat{p}_{\rm smoking} = \hat{P}(w=1 | x=1 ) = 0.1751$ and $\hat{p}_{\rm non-smoking} = \hat{P}(w=1 | x=0) = 0.1393$, the relative risk becomes $RR = 1.257$ and the odds-ratio is $OR = 1.312$ or approximately 4:3. 
 
         For two independent populations, the RR gives that if the mother smokes, there is a 26 \% higher probability that the child wheezes. The odds-ratio gives that the baby is more likely to have wheezing if exposed to a smoking mother. The odds ratio should be accompanied by a confidence interval, which will be obtained in the next exercise. 
 
@@ -248,7 +248,7 @@
 
         having $\Delta_x$ as one unit increase in $x$, the odds ratio becomes $\exp[\beta_1]$. 
 
-        The confidence interval for the odds ratio is baked into the uncertainty following the approximation of the maximum likelohood parameter $\beta_1$; $\hat{\beta_1}$. 
+        The confidence interval for the odds ratio is baked into the uncertainty following the approximation of the maximum likelihood parameter $\beta_1$; $\hat{\beta_1}$. 
 
         Using the \texttt{glm}-argument with \texttt{family=binomial} in R, the maximum likelihood parameters $\beta_0$, $\beta_{\rm smoking}$ and $\beta_{\rm age}$ were estimated for the case where children were wheezing.
 
@@ -263,7 +263,13 @@
         
         The null hypothesis that smoking has no effect ($\beta_{\rm smoking} = 0$) is rejected if $|z| = \big| \hat{\beta}_{\rm smoking} / se\left( \hat{\beta}_{\rm smoking}  \right) \big|$ is large. Here, $z = 2.202$, yielding a slightly \textit{significant} $P$-value, meaning the null hypothesis could be valid; $P = 0.0277$. 
 
-        A second model, including the covariate \texttt{age} as well as the binary covariate \texttt{smoking}, would need a different mean of testing the null hypothesis that the covariates have no effect. 
+        A second model, including the covariate \texttt{age} as well as the binary covariate \texttt{smoking}, would need a different mean of testing the null hypothesis that the covariates have no effect. In the case with linear models, the model was said to give a good fit if the model was able to minimise the residual sum of squares. In logistic regression, the model is said to procure a good fit if it can minimise the $G = D_0 - D$ statistic, that is, minimise the difference in deviance under the null hypothesis ($D_0$) and the logistic model ($D$). The $G$-statistic is $\chi^2$ distributed and the $P$-value for the null hypothesis can then be read out when the degrees of freedom are known. It is thus necessary to have a baseline model to compare with, and the null hypothesis is that there is no effect from adding/removing covariates.
+
+        A model with two covariates, \texttt{smoking} and \texttt{age}, yielded maximum likelihood estimates (MLEs) $\beta_{\rm smoking} = 0.2721$ and $\beta_{\rm age} = -0.1134$. The $P$-value was slightly reduced for the \texttt{smoking} covariate compared to the first model, from $P = 0.0277$ to $P= 0.0275$. The $P$-value of the MLE 
+
+        The first model, with only one covariate, has residual deviance $D_0 = 1824$, and the model with two covariates has residual deviance $D = 1820$, giving $G = 4.417$ and $P = 0.0356$ under one degree of freedom. The second model does thus prove to be a slight improvement over the first model. It should be noted that the MLE $\beta_{\rm smoking}$ did not change substantially from one model to the other, indicating that the covariates \texttt{age} and \texttt{smoking} are \textit{not} confounded. The association with smoking is thus \textit{not} changed when taking age into account.
+
+        In the second model, the MLEs $\beta_{\rm smoking} = 0.2721$ indicates that the binary covariate \texttt{smoking} increases the odds of a child wheezing, compared to the baseline where the mother does not smoke. Furthermore, $\beta_{\rm age} = -0.1134$ indicates that the odds of wheezing are \textit{decreased} when the age is increased. The odds of wheezing is reduced by a factor of $\exp\left[ -0.1134 x_{\rm age} \right]$ for increases in one year from the baseline 7 years, to the maximum 10 years of age. 
 
 \end{enumerate}
 
@@ -279,7 +285,7 @@
 \label{sec:appendix}
 
 \subsection{Problem 1a)}
-\label{app:b}
+\label{app:1a}
 
 For the linear models in exercise 1a);
 {\footnotesize
@@ -287,7 +293,7 @@ For the linear models in exercise 1a);
 }
 
 \subsection{Problem 1b)}
-\label{app:b}
+\label{app:1b}
 
 For the three linear models in exercise 1b);
 {\footnotesize
@@ -304,6 +310,11 @@ For the three linear models in exercise 1b);
 \subsubsection{3b)}
 {\footnotesize
     \verbatiminput{../res_ex3b.txt}
+}
+
+Comparision of the two logistic models, one with only one covariate, and the other with two covariates (\texttt{smoking} and \texttt{age});
+{\footnotesize
+    \verbatiminput{../res_ex3b_anova.txt}
 }
 
 
