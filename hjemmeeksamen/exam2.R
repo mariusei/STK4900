@@ -2,6 +2,7 @@
 # STK4900   -   Spring 2014
 
 ### PROBLEM 2 ###
+source("utils_STK4900.R")
 
 # Load data:
 drvisits<-read.table("http://www.uio.no/studier/emner/matnat/math/STK4900/v14/drvisits.txt",h=T)
@@ -41,6 +42,55 @@ age60 = fit.fullmodel.RR.95CI[3,1]  ^ ( 60 - min(age) )
 # What is the impact on the visitation rate by being richest?
 richest = fit.fullmodel.RR.95CI[7,1] ^ ( max(loginc) - min(loginc) )
 
+
+### 2c) Poisson model with interaction and quadratic terms
+fit.hugemodel = glm(numvisit~reform+age+badh+loginc+reform:age+reform:badh+reform:loginc+reform:age+age:badh+age:loginc+badh:loginc)
+
+
+model.step1 = lapply(c(
+        numvisit~reform+age+badh+loginc,
+        numvisit~reform+age+badh+loginc+reform:age,
+        numvisit~reform+age+badh+loginc+reform:badh,
+        numvisit~reform+age+badh+loginc+reform:loginc,
+        numvisit~reform+age+badh+loginc+age:badh,
+        numvisit~reform+age+badh+loginc+age:loginc,
+        numvisit~reform+age+badh+loginc+badh:loginc,
+        numvisit~reform+age+badh+loginc+I(age^2),
+        numvisit~reform+age+badh+loginc+I(loginc^2)
+                 ), sumry_poisson)
+
+model.step2 = lapply(c(
+        numvisit~reform+age+badh+loginc+I(loginc^2),
+        numvisit~reform+age+badh+loginc+I(loginc^2)+reform:age,
+        numvisit~reform+age+badh+loginc+I(loginc^2)+reform:badh,
+        numvisit~reform+age+badh+loginc+I(loginc^2)+reform:loginc,
+        numvisit~reform+age+badh+loginc+I(loginc^2)+age:badh,
+        numvisit~reform+age+badh+loginc+I(loginc^2)+age:loginc,
+        numvisit~reform+age+badh+loginc+I(loginc^2)+badh:loginc,
+        numvisit~reform+age+badh+loginc+I(loginc^2)+I(age^2)
+                 ), sumry_poisson)
+
+model.step1.deviances = NULL
+model.step2.deviances = NULL
+
+for (i in 1:length(model.step1)) {
+    model.step1.deviances[i] = model.step1[[i]]$deviance 
+}
+for (i in 1:length(model.step2)) {
+    model.step2.deviances[i] = model.step2[[i]]$deviance 
+}
+
+# What model minimises the deviance?
+dev1.H0  = model.step1.deviances[1]
+dev1.min = min(model.step1.deviances)
+dev1.minindex = which(model.step1.deviances == dev1.min)
+G1 = dev1.H0 - dev1.min
+
+dev2.H0  = model.step2.deviances[1]
+dev2.min = min(model.step2.deviances)
+dev2.minindex = which(model.step2.deviances == dev2.min)
+G2 = dev2.H0 - dev2.min
+
 # Save results to file
 sink("res_ex2a.txt", split=TRUE)
 print("2A: POISSON MODEL: only health reform covariate")
@@ -59,5 +109,30 @@ print(age60)
 print("2B: What is the RR for the household with the HIGHEST income to the lowest?")
 print(richest)
 
+sink()
+sink("res_ex2c-model1.txt", split=TRUE)
+print("STEP 1: model no, deviance")
+for (i in 1:length(model.step1)) {
+    print(paste0(i, " ",  model.step1.deviances[i]))
+}
+print("G statistic for smallest deviance? STEP 1")
+print(paste0("i = ", dev1.minindex, " has G = ", G1))
+print(anova(model.step1[[1]], model.step1[[dev1.minindex]], test="Chisq"))
+
+sink()
+sink("res_ex2c-model2.txt", split=TRUE)
+print("STEP 2: model no, deviance")
+for (i in 1:length(model.step2)) {
+    print(paste0(i, " ",  model.step2.deviances[i]))
+}
+
+print("G statistic for smallest deviance? STEP 2")
+print(paste0("i = ", dev2.minindex, " has G = ", G2))
+print(anova(model.step1[[dev1.minindex]], model.step2[[dev2.minindex]], test="Chisq"))
+
+sink()
+sink("res_ex2c.txt", split=TRUE)
+print("Best fit model summary")
+print(summary(model.step1[[9]]))
 
 sink()
