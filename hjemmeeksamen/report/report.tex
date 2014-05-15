@@ -93,7 +93,7 @@
 
 \date{\today}
 \title{Project Exam spring 2014\\ \small{Statistical methods and applications -- STK4900}}
-\author{Candidate} 
+\author{Candidate 208} 
 
 
 \begin{document}
@@ -185,7 +185,9 @@
 
 \clearpage
 \section*{Problem 2 -- German health reform}
-    In this exercise, data from the German health reform is analysed. It investigates how the number of visits during a previous three month period to the doctor depends on the factors \texttt{age}, \texttt{educ} (education in years), \texttt{married} (binary), \texttt{badh} (in ``bad'' or ``good'' health, binary), \texttt{loginc} (the logarithm of the income in Marks), and \texttt{reform} (binary, whether the participant was surveyed prior to, or after the health reform).  
+    In this exercise, data from the German health reform is analysed. It investigates how the number of visits during a previous three month period to the doctor depends on the factors \texttt{age}, \texttt{educ} (education in years), \texttt{married} (binary), \texttt{badh} (in ``bad'' or ``good'' health, binary), \texttt{loginc} (the logarithm of the income in Marks), and \texttt{reform} (binary, whether the participant was surveyed prior to, or after the health reform).
+    
+    See appendix~(\ref{app:2}) for R-outputs.
 
 \begin{enumerate}[label=2\alph*)]
     \item The motivation for using Poisson regression for the analysis of the data set is that the doctoral visits can be thought of as a Poisson process -- these are events happening randomly over time. Such a process can be modelled using the rate factor $\lambda$, giving the rate of events per time. If $\lambda$ is constant and the events are independent of each other and do not occur together, we have a Poisson process. The \textit{rate ratio} gives the ratio between two rates, where one $\lambda$ is a function of several covariates, and the other is the function of the same covariates, \textit{but} with one unit's change in one of these.
@@ -213,7 +215,7 @@
         \end{equation}
         which gives a 95 \% CI: $[0.7893, 0.8754]$. As a rate ratio of unity indicates no change, and is not included in the CI, the reform effect should be significant. This can also be seen from the $P$-value for the $z$-statistic, with $P\sim 10^{-12}$, and the null hypothesis (no effect from \texttt{reform} covariate) is \textit{rejected}. 
 
-        The physical interpretation from the rate ratio is that following the health reform, an individual would see the doctor approximately 20 \% less often than prior to the reform. See appendix~(\ref{app:2a}) for R-outputs.
+        The physical interpretation from the rate ratio is that following the health reform, an individual would see the doctor approximately 20 \% less often than prior to the reform. 
 
     \item Using all covariates in a model, the following covariates were found to have a significant impact on the tendency to visit the doctor;
         \begin{itemize}
@@ -237,12 +239,57 @@
         \]
         when compared to the baseline (lowest income, youngest, in good health).
 
+    \item To determine whether a model that accounts for possible quadratic effects of covariates or interactions between the covariates, forward selection of covariates is needed. For simplification, the initial starting point for additional interaction or quadratic terms, are the four covariates that contributed most; \texttt{reform}, \texttt{age}, \texttt{badh} and \texttt{loginc}.
+
+        The forward selection procedure consists of trying the model with the $p$ available covariates sequentially (here: $p$ is the sum of interaction and quadratic terms, thus excluding non-interaction and linear terms), and then including the one covariate that reduces the deviance the most, before trying the remaining $p-1$ covariates, and then choosing the next covariate that ``fits best'' and so on, until no reduction in deviance can be found. 
+
+        The deviance is found as the difference in the logarithm of the likelihood for a saturated model where there are no restrictions on the rates, and the log-likelihood of a predicted model, where the rates are predicted from a Poisson regression model. Note that the likelihood is a function of the rates and hence the parameters, not the covariates. The deviance of a certain model can be compared to the deviance of a model under $H_0$. 
+
+        See tab.~(\ref{tab:2c-1}) for a list of model numbers, which covariates these models were composed of, and the deviances. The $H_0$ model is the model with only the significant covariates found in ex.~2b). Only quadratic terms where the covariate was not binary are tested, as there should be no effect on changes in the response for other exponents of the covariate (the possible values the covariate can take on is 0 and 1).
+        
+        The deviance of the model under $H_0$ was $D_0 = 7426.09$. The most reduction in deviance was found by forward selection to be with the additional term \texttt{I(loginc$^2$)}, with $D = 7415.55$, yielding a $\chi^2$ distributed $G = D_0 - D$ statistic, with $G = 10.54$ under 1 df. This yields a $P$-value of $1.166 \times 10^{-3}$, which is insignificant.
+
+        The process was repeated with the previously found model that reduced the deviance the most, using forward selection of the remaining covariates. The covariate that was found to reduce the deviance the most was \texttt{I(age$^2$)}, but yielded $G = 3.276$ under 1 df, with $P = 0.0703$, which is significant, and $H_0$ is confirmed: \texttt{I(age$^2$)} did not have a significant impact on the rate. The forward selection process was ended here, and the final model was
+        \begin{multline}
+            \lambda = \exp\big[ \beta_0 + \beta_{\rm reform} x_{\rm reform} + \beta_{\rm age} x_{\rm age} + \beta_{\rm badh} x_{\rm badh} \\
+            + \beta_{\rm loginc} x_{\rm loginc} + \beta_{\rm loginc^2} x_{\rm loginc}^2 \big]
+            \label{eq:poissonmodel}
+        \end{multline}
+        where the coefficients (see app.~(\ref{app:2c})) are largely the same as for the model in ex.~2b) with one exception; $\hat{\beta}_{\rm loginc} = 2.942$ is much higher, but the addition of the quadratic term $x_{\rm loginc}^2$ with the estimate $\hat{\beta}_{\rm loginc^2} = -0.1831$ \textit{reduces} the effect of the now much increased effect in the linear term.
+
+        \begin{table}
+            \scriptsize
+            \centering
+            \makebox[\linewidth]{
+            \begin{tabular}{c cccc cccc cc}
+                \hline 
+                \textbf{Model}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+                \hline
+                $H_0$           & Y & Y & Y & Y & Y & Y & Y & Y & Y \\
+                \texttt{reform:age}&& Y \\
+                \texttt{reform:badh}&&  & Y \\
+                \texttt{reform:loginc}&&&   & Y \\
+                \texttt{age:badh}&  &   &   &   & Y \\
+                \texttt{age:loginc}&&   &   &   &   & Y \\
+                \texttt{badh:loginc}&&  &   &   &   &   & Y \\
+                \texttt{I(age$^2$)} &&  &   &   &   &   &   & Y \\
+                \texttt{I(loginc$^2$)}&&&   &   &   &   &   &   & Y \\
+                \hline
+                \textbf{Deviance}& 7426.09 & 7426.09 & 7425.82 & 7426.03
+                                 & 7424.10 & 7426.07 & 7425.532
+                                 & 7422.80 & 7415.55 \\
+                \hline
+            \end{tabular}}
+            \caption{Model numbers and deviations for models where interaction and quadratic covariates are forward selected. The $H_0$ model is obtained from ex.~2b), holding only the linear covariates that had a significant effect on the rate. Note that only the quadratic terms for covariates that are not binary are tested, as binary covariates only has two options and these are the same independent of exponent.}
+            \label{tab:2c-1}
+        \end{table}
+
 \end{enumerate} 
 
 \clearpage
 \section*{Problem 3 -- Wheezing}
 \begin{enumerate}[label=3\alph*)]
-    \item  The proportion of children with wheezing to whether the mother is a smoker or non-smoker can be found as $\hat{p}_{\rm smoker} = w / n_{\rm smoker}$ and  $\hat{p}_{\rm non-smoker} = w / n_{\rm non-smoker}$, where $w$ is the number of children wheezing in the sample, and $n_i$ is the subgroup of the population with property $i$. A null hypothesis, $H_0$, that $p_{\rm smoker} = p_{\rm non-smoker}$ can be estimated using the $z$-statistic, given as
+    \item  The proportion of children that wheezes to whether the mother is a smoker or non-smoker can be found as $\hat{p}_{\rm smoker} = w / n_{\rm smoker}$ and  $\hat{p}_{\rm non-smoker} = w / n_{\rm non-smoker}$, where $w$ is the number of children wheezing in the sample, and $n_i$ is the subgroup of the population with property $i$. A null hypothesis, $H_0$, that $p_{\rm smoker} = p_{\rm non-smoker}$ can be estimated using the $z$-statistic, given as
         \begin{equation}
             z = \frac{\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker}}{se_0(\hat{p}_{\rm smoker} - \hat{p}_{\rm non-smoker} ) }
             \label{eq:z_statistic}
@@ -335,6 +382,7 @@
 \label{sec:appendix}
 
 \subsection{Problem 1 -- Urea formaldehyde in houses}
+\label{app:1}
 \subsubsection{Problem 1a)}
 \label{app:1a}
 
@@ -352,6 +400,7 @@ For the three linear models in exercise 1b);
 }
 
 \subsection{Problem 2 -- German health reform}
+\label{app:2}
 
 \subsubsection{Problem 2a)}
 \label{app:2a}
@@ -365,7 +414,25 @@ For the three linear models in exercise 1b);
     \verbatiminput{../res_ex2b.txt}
 }
 
+\subsubsection{Problem 2c)}
+\label{app:2c}
+\textbf{Poisson regression analysis using forward selection of covariates.} The output is for the models numbered in tab.~(\ref{tab:2c-1}) and show the deviances. The model with the lowest residual is analysed.
+{\footnotesize
+    \verbatiminput{../res_ex2c-model1.txt}
+}
+\textbf{Poisson regression analysis using forward selection of covariates, now compared to the model procured in the first forward selection iteration.} The model numbers are the same as in tab.~(\ref{tab:2c-1}), but the $H_0$ model is the model found using forward selection, and the last element is removed (and is now included in the $H_0$ model).
+{\footnotesize
+    \verbatiminput{../res_ex2c-model2.txt}
+}
+
+\textbf{Summary showing the coefficients and significance of the MLE parameters found using forward selection}.
+{\footnotesize
+    \verbatiminput{../res_ex2c.txt}
+}
+
+
 \subsection{Problem 3 -- Wheezing}
+\label{app:3}
 \subsubsection{3a)}
 {\footnotesize
     \verbatiminput{../res_ex3.txt}
